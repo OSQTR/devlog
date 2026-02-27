@@ -1,5 +1,5 @@
 const USER = "osqtr";
-const REPO = "your-repo";
+const REPO = "devlog";
 const DIR = "logs";
 
 export async function fetchMarkdownList() {
