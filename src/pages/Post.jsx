@@ -1,23 +1,37 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import MarkdownViewer from "../components/MarkdownViewer";
-import { fetchPostList } from "../services/github";
+import Pagination from "../components/Pagination";
+import { fetchPostList, fetchMarkdownContent } from "../services/github";
 
 export default function Post() {
   const { id } = useParams();
-
+  const navigate = useNavigate();
+  const [list, setList] = useState([]);
   const [content, setContent] = useState("");
 
   useEffect(() => {
-    fetchPostList()
-      .then((list) => {
-        const post = list.find((p) => p.id === id);
+    fetchPostList().then(setList);
+  }, []);
 
-        return fetch(post.url);
-      })
-      .then((res) => res.text())
-      .then(setContent);
-  }, [id]);
+  useEffect(() => {
+    if (!list.length) return;
+    const post = list.find((p) => p.id === id);
+    if (post) fetchMarkdownContent(post.url).then(setContent);
+  }, [list, id]);
 
-  return <MarkdownViewer content={content} />;
+  const index = list.findIndex((p) => p.id === id);
+
+  function handleChange(newIndex) {
+    navigate(`/post/${list[newIndex].id}`);
+  }
+
+  return (
+    <>
+      <MarkdownViewer content={content} />
+      {list.length > 0 && (
+        <Pagination page={index} total={list.length} onChange={handleChange} />
+      )}
+    </>
+  );
 }

@@ -1,28 +1,20 @@
 import { useEffect, useState } from "react";
-import MarkdownViewer from "../components/MarkdownViewer";
-import Pagination from "../components/Pagination";
-import { fetchPostList, fetchMarkdownContent } from "../services/github";
+import { Navigate } from "react-router-dom";
+import { fetchPostList } from "../services/github";
 
 export default function Home() {
-  const [list, setList] = useState([]);
-  const [page, setPage] = useState(0);
-  const [content, setContent] = useState("");
+  const [latestId, setLatestId] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchPostList().then(setList);
+    fetchPostList().then((list) => {
+      if (list.length) setLatestId(list[0].id);
+      setLoading(false);
+    });
   }, []);
 
-  useEffect(() => {
-    if (!list.length) return;
+  if (loading) return null;
+  if (!latestId) return <p>글이 없습니다.</p>;
 
-    fetchMarkdownContent(list[page].url).then(setContent);
-  }, [list, page]);
-
-  return (
-    <>
-      <MarkdownViewer content={content} />
-
-      <Pagination page={page} total={list.length} onChange={setPage} />
-    </>
-  );
+  return <Navigate to={`/post/${latestId}`} replace />;
 }
