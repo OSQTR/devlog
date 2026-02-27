@@ -18,6 +18,7 @@ export default function Post() {
     if (!list.length) return;
     const post = list.find((p) => p.id === id);
     if (post) fetchMarkdownContent(post.url).then(setContent);
+    window.scrollTo(0, 0);
   }, [list, id]);
 
   const index = list.findIndex((p) => p.id === id);
