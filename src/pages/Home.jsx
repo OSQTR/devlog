@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import MarkdownViewer from "../components/MarkdownViewer";
 import Pagination from "../components/Pagination";
-import { fetchMarkdownList, fetchMarkdownContent } from "../services/github";
+import { fetchPostList, fetchMarkdownContent } from "../services/github";
 
 export default function Home() {
   const [list, setList] = useState([]);
@@ -9,13 +9,13 @@ export default function Home() {
   const [content, setContent] = useState("");
 
   useEffect(() => {
-    fetchMarkdownList().then(setList);
+    fetchPostList().then(setList);
   }, []);
 
   useEffect(() => {
     if (!list.length) return;
 
-    fetchMarkdownContent(list[page].download_url).then(setContent);
+    fetchMarkdownContent(list[page].url).then(setContent);
   }, [list, page]);
 
   return (
