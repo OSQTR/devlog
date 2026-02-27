@@ -16,7 +16,7 @@ const Container = styled.div`
   }
 
   h1 { font-size: 2em; border-bottom: 1px solid #d1d9e0; padding-bottom: 10px; }
-  h2 { font-size: 1.5em; border-bottom: 1px solid #d1d9e0; padding-bottom: 8px; }
+  h2 { font-size: 1.5em; border-top: 1px solid #d1d9e0; padding-top: 24px; }
   h3 { font-size: 1.25em; }
 
   p {
