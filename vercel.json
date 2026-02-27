@@ -1,3 +1,4 @@
 {
-  "ignoreCommand": "git diff --name-only HEAD^ HEAD | grep -qvE '\\.md$'"
+  "ignoreCommand": "git diff --name-only HEAD^ HEAD | grep -qvE '\\.md$'",
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
 }
