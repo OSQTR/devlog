@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import styled from "styled-components";
 
 const Container = styled.div`
@@ -105,7 +106,7 @@ const Container = styled.div`
 export default function MarkdownViewer({ content }) {
   return (
     <Container>
-      <ReactMarkdown>{content}</ReactMarkdown>
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
     </Container>
   );
 }
