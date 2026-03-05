@@ -19,7 +19,25 @@ export async function fetchPostList() {
     .sort((a, b) => b.id.localeCompare(a.id));
 }
 
+function parseFrontmatter(raw) {
+  const match = raw.match(/^---\n([\s\S]+?)\n---\n?([\s\S]*)$/);
+  if (!match) return { meta: {}, body: raw };
+
+  const meta = {};
+  for (const line of match[1].split('\n')) {
+    const colonIdx = line.indexOf(':');
+    if (colonIdx === -1) continue;
+    const key = line.slice(0, colonIdx).trim();
+    const value = line.slice(colonIdx + 1).trim();
+    meta[key] = value.startsWith('[') && value.endsWith(']')
+      ? value.slice(1, -1).split(',').map(t => t.trim())
+      : value;
+  }
+
+  return { meta, body: match[2].trimStart() };
+}
+
 export async function fetchMarkdownContent(url) {
   const res = await fetch(url);
-  return res.text();
+  return parseFrontmatter(await res.text());
 }

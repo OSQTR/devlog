@@ -8,7 +8,8 @@ export default function Post() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [list, setList] = useState([]);
-  const [content, setContent] = useState("");
+  const [meta, setMeta] = useState({});
+  const [body, setBody] = useState("");
 
   useEffect(() => {
     fetchPostList().then(setList);
@@ -17,7 +18,7 @@ export default function Post() {
   useEffect(() => {
     if (!list.length) return;
     const post = list.find((p) => p.id === id);
-    if (post) fetchMarkdownContent(post.url).then(setContent);
+    if (post) fetchMarkdownContent(post.url).then(({ meta, body }) => { setMeta(meta); setBody(body); });
     window.scrollTo(0, 0);
   }, [list, id]);
 
@@ -29,7 +30,7 @@ export default function Post() {
 
   return (
     <>
-      <MarkdownViewer content={content} />
+      <MarkdownViewer meta={meta} content={body} />
       {list.length > 0 && (
         <Pagination page={index} total={list.length} onChange={handleChange} />
       )}

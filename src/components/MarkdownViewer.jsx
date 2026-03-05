@@ -2,6 +2,40 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import styled from "styled-components";
 
+const PostHeader = styled.div`
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #d1d9e0;
+
+  h1 {
+    font-size: 2em;
+    font-weight: 600;
+    line-height: 1.25;
+    margin: 0 0 8px;
+  }
+
+  .meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #636c76;
+    font-size: 14px;
+  }
+
+  .tags {
+    display: flex;
+    gap: 6px;
+  }
+
+  .tag {
+    padding: 2px 8px;
+    background: #f0f0f0;
+    border-radius: 12px;
+    font-size: 12px;
+    color: #1f2328;
+  }
+`;
+
 const Container = styled.div`
   max-width: 800px;
   margin: auto;
@@ -103,9 +137,25 @@ const Container = styled.div`
   }
 `;
 
-export default function MarkdownViewer({ content }) {
+export default function MarkdownViewer({ meta, content }) {
   return (
     <Container>
+      {meta.title && (
+        <PostHeader>
+          <h1>{meta.title}</h1>
+          <div className="meta">
+            {meta.date && <span>{meta.date}</span>}
+            {meta.author && <span>{meta.author}</span>}
+            {meta.tags && (
+              <div className="tags">
+                {(Array.isArray(meta.tags) ? meta.tags : [meta.tags]).map((tag) => (
+                  <span key={tag} className="tag">{tag}</span>
+                ))}
+              </div>
+            )}
+          </div>
+        </PostHeader>
+      )}
       <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
     </Container>
   );
